@@ -1,0 +1,12 @@
+services:
+  youtdown:
+    build: .
+    ports:
+      - "8001:8001"
+    volumes:
+      - downloads:/app/downloads
+    init: true
+    restart: unless-stopped
+
+volumes:
+  downloads:

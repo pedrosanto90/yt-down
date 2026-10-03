@@ -2,8 +2,41 @@
 
 Download YouTube audio as MP3 through a simple web page, the CLI or the API.
 
-Requires [uv](https://docs.astral.sh/uv/) and `ffmpeg` (used to extract the
-audio track).
+For local execution, requires [uv](https://docs.astral.sh/uv/) and `ffmpeg`
+(used to extract the audio track). Docker includes these dependencies.
+
+## Docker Compose
+
+With Docker and the Compose plugin installed, run:
+
+```sh
+docker compose up --build -d
+```
+
+Open http://127.0.0.1:8001. The container includes Python and `ffmpeg`, runs
+as a non-root user, and checks `/health` automatically. Dependencies are
+installed from `uv.lock` using the [uv Docker integration](https://docs.astral.sh/uv/guides/integration/docker/).
+
+The port is available on the local computer only. If port 8001 is already
+in use, choose another host port:
+
+```sh
+PORT=8002 docker compose up --build -d
+```
+
+In that case, open http://127.0.0.1:8002.
+
+```sh
+docker compose logs -f
+docker compose ps
+docker compose down
+```
+
+MP3 files are stored in a Docker named volume, separate from the local
+`downloads/` directory, and survive container recreation and `docker compose down`.
+`docker compose down -v` also deletes the stored MP3 files. Job history is
+kept in memory and resets when the container restarts; run a single worker.
+After code changes, run `docker compose up --build -d` again.
 
 ## Install
 
