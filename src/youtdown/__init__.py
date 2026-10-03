@@ -2,6 +2,8 @@ import sys
 
 import yt_dlp
 
+from youtdown.downloader import download_audio
+
 
 def main() -> None:
     if len(sys.argv) < 2:
@@ -12,21 +14,10 @@ def main() -> None:
 
     print("Youtube Audio Downloader")
 
-    ydl_opts = {
-        "format": "bestaudio/best",
-        "postprocessors": [
-            {
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp3",
-                "preferredquality": "192",
-            }
-        ],
-        "outtmpl": "downloads/%(title)s.%(ext)s",
-    }
-
     try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+        path = download_audio(url)
     except yt_dlp.utils.DownloadError as error:
         print(f"Download failed: {error}")
         sys.exit(1)
+
+    print(f"Saved to {path}")
