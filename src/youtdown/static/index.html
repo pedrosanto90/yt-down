@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>youtdown — Download de áudio</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <div class="brand"><span aria-hidden="true">↓</span> youtdown</div>
+      <h1>O teu áudio,<br>no teu computador.</h1>
+      <p class="intro">Cola um link do YouTube para descarregar o áudio em MP3.</p>
+      <form id="download-form">
+        <label for="url">Link do YouTube</label>
+        <div class="controls">
+          <input id="url" name="url" type="url" placeholder="https://www.youtube.com/watch?v=…" required autocomplete="off">
+          <button id="submit" type="submit">Descarregar MP3 <span aria-hidden="true">↓</span></button>
+        </div>
+      </form>
+      <section id="result" hidden aria-live="polite" aria-atomic="true">
+        <p id="status" role="status"></p>
+        <a id="save" hidden>Guardar MP3</a>
+      </section>
+      <p class="note">Quando estiver pronto, a transferência começa automaticamente. O browser guarda o ficheiro na pasta de downloads ou pede-te para escolher onde guardar.</p>
+    </main>
+  </body>
+</html>

@@ -8,6 +8,7 @@ DEFAULT_DOWNLOAD_DIR = Path("downloads")
 def download_audio(url: str, download_dir: Path = DEFAULT_DOWNLOAD_DIR) -> Path:
     download_dir.mkdir(parents=True, exist_ok=True)
 
+    paths: list[Path] = []
     ydl_opts = {
         "format": "bestaudio/best",
         "postprocessors": [
@@ -17,16 +18,15 @@ def download_audio(url: str, download_dir: Path = DEFAULT_DOWNLOAD_DIR) -> Path:
                 "preferredquality": "192",
             }
         ],
-        "outtmpl": str(download_dir / "%(title)s.%(ext)s"),
+        "outtmpl": str(download_dir / "%(title).180B [%(id)s].%(ext)s"),
+        "noplaylist": True,
+        "post_hooks": [lambda filename: paths.append(Path(filename))],
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=True)
+        ydl.extract_info(url, download=True)
 
-    requested = info.get("requested_downloads") or [info]
-    filepath = requested[0].get("filepath")
-
-    if not filepath:
+    if not paths or not paths[-1].is_file():
         raise yt_dlp.utils.DownloadError("could not determine output file path")
 
-    return Path(filepath)
+    return paths[-1]
